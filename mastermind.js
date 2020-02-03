@@ -11,34 +11,76 @@ let board = [];
 let solution = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-function printBoard() {
+const printBoard = () =>  {
   for (let i = 0; i < board.length; i++) {
     console.log(board[i]);
   }
 }
 
-function generateSolution() {
+const generateSolution = () =>  {
   for (let i = 0; i < 4; i++) {
     const randomIndex = getRandomInt(0, letters.length);
     solution += letters[randomIndex];
   }
 }
 
-function getRandomInt(min, max) {
+const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function generateHint() {
-  // your code here
+const generateHint = (guess) =>  {
+  
+  let guessArray = guess.split('');
+  let solutionArray = solution.split('');
+
+  let correctLetterLocations = 0; 
+  let correctLetters = 0; 
+
+  for (let i=0; i<4; i++) {
+    if (guessArray[i] === solutionArray[i]) {
+      correctLetterLocations++;
+      solutionArray[i] = null;
+    }
+  }
+
+  console.log(solutionArray);
+  console.log(guessArray);
+
+  for (let i=0; i<4; i++) {
+    let targetIndex = solutionArray.indexOf(guessArray[i]); 
+    if (targetIndex > -1) {
+      correctLetters++;
+      solutionArray[targetIndex] = null;
+      console.log(solutionArray);
+  }
 }
 
-function mastermind(guess) {
+  return correctLetterLocations + "-" + correctLetters;
+
+}
+
+const checkForWin = (guess, solution) => {
+  
+  if (guess === solution) {
+    return true;
+  }
+  else {
+    return;
+  }
+}
+
+
+const mastermind = (guess) => {
   solution = 'abcd'; // Comment this out to generate a random solution
-  // your code here
+  let hint = generateHint(guess);
+  board.push(`Guess: ${guess} - Hint: ${hint}`);
+  if (checkForWin(guess, solution) == true) {
+    return "You guessed it!";
+  }
 }
 
 
-function getPrompt() {
+const getPrompt = () =>  {
   rl.question('guess: ', (guess) => {
     mastermind(guess);
     printBoard();
@@ -75,3 +117,6 @@ if (typeof describe === 'function') {
   generateSolution();
   getPrompt();
 }
+
+
+
